@@ -15,7 +15,9 @@ jobs:
           command: python ./manage.py test
           name: Test
       - run:
-          command: http://jenkins5.nauto.systems:8080/job/kelvin_test/build?token=kelvins
+          command: curl -l -u build:11520933ecdaa7d1a269b43d03e4465024  http://jenkins5.nauto.systems:8080/job/kelvin_test/buildWithParameters
+?token=build&param1=Value
+          name: Test2s
 
 workflows:
   main:
