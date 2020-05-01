@@ -22,7 +22,10 @@ jobs:
           command: curl --location --request GET 'https://postman-echo.com/get?foo1=bar1&foo2=bar2'
           name: Test3
       - run:
-          command: echo ${CIRCLE_BRANCH}  ${CIRCLE_PULL_REQUEST}
+          command: |
+              echo ${CIRCLE_BRANCH}  ${CIRCLE_PULL_REQUEST}
+              echo ${CIRCLE_BUILD_URL} ${CIRCLE_BUILD_NUM}
+              echo ${CIRCLE_PR_NUMBER} ${CIRCLE_PR_USERNAME}
           name: Test4
 
 workflows:
