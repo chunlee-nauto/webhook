@@ -17,6 +17,7 @@ jobs:
       - run:
           command: curl -l -u build:11520933ecdaa7d1a269b43d03e4465024  'http://jenkins5.nauto.systems:8080/job/kelvin_test/buildWithParameters?token=build&param1=Value'
           name: Test2s
+          no_output_timeout: 30s
       - run:
           command: curl --location --request GET 'https://postman-echo.com/get?foo1=bar1&foo2=bar2'
           name: Test3
