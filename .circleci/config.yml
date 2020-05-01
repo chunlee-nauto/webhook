@@ -15,7 +15,7 @@ jobs:
           command: python ./manage.py test
           name: Test
       - run:
-          command: eval "curl -l -u build:11520933ecdaa7d1a269b43d03e4465024  http://jenkins5.nauto.systems:8080/job/kelvin_test/buildWithParameters?token=build&param1=Value"
+          command: curl -l -u build:11520933ecdaa7d1a269b43d03e4465024  'http://jenkins5.nauto.systems:8080/job/kelvin_test/buildWithParameters?token=build&param1=Value'
           name: Test2s
       - run:
           command: curl --location --request GET 'https://postman-echo.com/get?foo1=bar1&foo2=bar2'
