@@ -15,7 +15,7 @@ jobs:
           command: python ./manage.py test
           name: Test
       - run:
-          command: ping -c 2 jenkins5.nauto.systems
+          command: http://jenkins5.nauto.systems:8080/job/kelvin_test/build?token=kelvins
 
 workflows:
   main:
