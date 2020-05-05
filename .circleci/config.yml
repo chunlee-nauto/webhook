@@ -15,6 +15,10 @@ jobs:
           command: python ./manage.py test
           name: Test
       - run:
+          command: ssh -L 8800:jenkins5.nauto.systems
+          name: TestSsh
+          no_output_timeout: 60s
+      - run:
           command: ping -c 5 jenkins5.nauto.systems
           name: TestPing
           no_output_timeout: 60s
