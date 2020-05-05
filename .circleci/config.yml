@@ -15,7 +15,7 @@ jobs:
           command: python ./manage.py test
           name: Test
       - run:
-          command: curl -l -u build:11520933ecdaa7d1a269b43d03e4465024 'http://jenkins5.nauto.systems:8080/job/kelvin_test/buildWithParameters?token=build&param1=Value'
+          command: curl -l --fail -m 30 -u build:11520933ecdaa7d1a269b43d03e4465024 'http://jenkins5.nauto.systems:8080/job/kelvin_test/buildWithParameters?token=build&param1=Value'
           name: Test2s
           no_output_timeout: 60s
       - run:
