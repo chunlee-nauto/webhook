@@ -50,7 +50,7 @@ jobs:
             echo "config & login are plan varaibles set in the plan settings"
             echo $config | base64 --decode > config.ovpn
             echo $login  | base64 --decode > vpn.login
-            cat config.opvn
+            cat config.ovpn
           name: generate vpn files
       - run:
           command: |
@@ -76,7 +76,7 @@ jobs:
           no_output_timeout: 60s
       - run:
           command: |
-            pkill -9 openvpn
+            sudo pkill -9 openvpn
           name: kill openvpn
 
 
