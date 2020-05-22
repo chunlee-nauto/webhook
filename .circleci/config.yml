@@ -37,8 +37,10 @@ jobs:
               echo ${CIRCLE_PR_NUMBER} ${CIRCLE_PR_USERNAME}
           name: Test4
   trigger-jenkins-build:
-    machine:
-      image: ubuntu-1604:201903-01
+    #machine:
+    #  image: ubuntu-1604:201903-01
+    machine: true
+
     steps:
       - checkout
       - run: whoami
