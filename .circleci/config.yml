@@ -63,12 +63,20 @@ jobs:
           command: |
               ls
               sudo openvpn --config config.ovpn --auth-user-pass vpn.login > openvpn.log 2>&1 &
-              sleep 10
+              sudo /bin/bash -c 'echo "nameserver 10.6.14.7" > /run/resolved/resolv.conf'
+              while [ -n "$(ip addr show tun0 2>&1 > /dev/null)"]; do
+                sleep 1;
+              done
+              echo 1234567890
+              ip addr show tun0
+              echo 1234567890
               cat openvpn.log
           name: connect vpn
+          no_output_timeout: 90s
       - run:
           command: |
             sudo ifconfig
+            ping -c 2 www.google.com
             ping -c 2 10.6.21.22
             ping -c 2 jenkins5.nauto.systems
             curl -l --fail -m 30 -u build:11520933ecdaa7d1a269b43d03e4465024 'http://jenkins5.nauto.systems:8080/job/kelvin_test/buildWithParameters?token=build&param1=Value'
@@ -78,7 +86,6 @@ jobs:
           command: |
             sudo pkill -9 openvpn
           name: kill openvpn
-
 
 workflows:
   main:
