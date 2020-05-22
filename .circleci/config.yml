@@ -39,12 +39,10 @@ jobs:
   trigger-jenkins-build:
     executor: vpn/default
     steps:
-        - vpn/install
-          - vpn/connect
-          - run:
-              command: ping -c 5 jenkins5.nauto.systems
-              name: ping
-          - vpn/disconnect
+      - vpn/install
+      - vpn/connect
+      - run: ping -c 5 jenkins5.nauto.com
+      - vpn/disconnect
 
 workflows:
   main:
