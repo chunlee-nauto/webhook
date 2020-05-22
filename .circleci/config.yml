@@ -97,10 +97,16 @@ jobs:
             sudo pkill -9 openvpn
           name: kill openvpn
 
+#workflows:
+#  main:
+#    jobs:
+#      #- build-and-test
+#      - trigger-jenkins-build:
+#          context: trigger-jenkins-build:
 workflows:
-  main:
-    jobs:
-      #- build-and-test
-      - trigger-jenkins-build:
-          context: GLOBAL_ORG
+ version: 2
+ build-and-release:
+   jobs:
+     - trigger-jenkins-build:
+         context: GLOBAL_ORG
 
