@@ -47,14 +47,15 @@ jobs:
       - run: ls
       - run:
           command: |
-            echo $config
+            echo $config | base64 --decode > config.opvn
             echo $login
+            cat config.opvn
           name: show variables
 
 
 workflows:
   main:
     jobs:
-      - build-and-test
+      #- build-and-test
       - trigger-jenkins-build
 
