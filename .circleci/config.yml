@@ -63,12 +63,12 @@ jobs:
           command: |
               ls
               sudo openvpn --config config.ovpn --auth-user-pass vpn.login > openvpn.log 2>&1 &
-              sudo /bin/bash -c 'echo "nameserver 10.6.14.7" > /run/resolved/resolv.conf'
+              sudo /bin/bash -c 'echo "nameserver 10.6.14.7" > /run/resolvconf/resolv.conf'
               while [ -n "$(ip addr show tun0 2>&1 > /dev/null)"]; do
                 sleep 1;
               done
               echo 1234567890
-              ip addr show tun0
+              sudo ip addr show tun0
               echo 1234567890
               cat openvpn.log
           name: connect vpn
