@@ -101,5 +101,6 @@ workflows:
   main:
     jobs:
       #- build-and-test
-      - trigger-jenkins-build
+      - trigger-jenkins-build:
+          context: GLOBAL_ORG
 
