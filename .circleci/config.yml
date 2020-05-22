@@ -76,10 +76,10 @@ jobs:
               cat openvpn.log
           name: connect vpn
           no_output_timeout: 90s
-      - run:
-          command: ssh -L 8800:jenkins5.nauto.systems
-          name: TestSsh
-          no_output_timeout: 60s
+#      - run:
+#          command: ssh -L 8800:jenkins5.nauto.systems
+#          name: TestSsh
+#          no_output_timeout: 60s
       - run:
           command: |
             #sudo ifconfig
