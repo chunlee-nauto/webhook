@@ -27,10 +27,9 @@ jobs:
           ls
           sudo openvpn --config config.ovpn --auth-user-pass vpn.login > openvpn.log 2>&1 &
           sudo /bin/bash -c 'echo "nameserver 10.6.14.7" > /run/resolvconf/resolv.conf'
-          #while [ -n "$(ip addr show tun0 2>&1 > /dev/null)" ]; do
-          #  sleep 0.1;
-          #done
-          sleep 10
+          while [ -n "$(ip addr show tun0 2>&1 > /dev/null)" ]; do
+            sleep 0.1;
+          done
           cat  openvpn.log
     - run:
         name: Do stuff in our infrastructure
