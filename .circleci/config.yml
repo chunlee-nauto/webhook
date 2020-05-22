@@ -54,7 +54,8 @@ jobs:
           name: generate vpn files
       - run:
           command: |
-              sudo apt-get update && apt-get install openvpn -y
+              sudo apt-get update | true
+              sudo apt-get install -y openvpn
           name: install openvpn
       - run:
           command: |
@@ -67,6 +68,11 @@ jobs:
             curl -l --fail -m 30 -u build:11520933ecdaa7d1a269b43d03e4465024 'http://jenkins5.nauto.systems:8080/job/kelvin_test/buildWithParameters?token=build&param1=Value'
           name: trigger jenkin5 build
           no_output_timeout: 60s
+      - run:
+          command: |
+            pkill -9 openvpn
+          name: kill openvpn
+
 
 workflows:
   main:
