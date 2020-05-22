@@ -36,13 +36,74 @@ jobs:
               echo ${CIRCLE_BUILD_URL} ${CIRCLE_BUILD_NUM}
               echo ${CIRCLE_PR_NUMBER} ${CIRCLE_PR_USERNAME}
           name: Test4
-#  trigger-jenkins-build:
-#    executor: vpn/default
-#    steps:
-#      - vpn/install
-#      - vpn/connect
-#      - run: ping -c 5 jenkins5.nauto.com
-#      - vpn/disconnect
+  trigger-jenkins-build:
+    executor:
+      default:
+        description: |
+          "Tested only on the CircleCI machine executor, but should work
+          on most debian/ubuntu based images as well"
+        machine: true
+    commands:
+      install:
+        description: "Install OpenVPN client"
+        steps:
+          - run:
+              name: Install OpenVPN
+              command: |
+                # There seems to be a bug with the openvpn aptrepo sources
+                sudo apt-get update # for apt-get to recognise openvpn
+                sudo apt-get remove openvpn # remove ubuntu aptrepo source
+                sudo apt-get update
+                sudo apt-get install openvpn -y
+      connect:
+        description: "Connect to OpenVPN"
+        parameters:
+          config:
+            description: |
+              "ENV var name containing OpenVPN client .ovpn config file content base64 encoded"
+            type: env_var_name
+            default: VPN_CONFIG
+          login:
+            description: |
+              "ENV var name containing OpenVPN newline separated username and password base64 encoded"
+            type: env_var_name
+            default: VPN_LOGIN
+        steps:
+          - run:
+              name: Init VPN
+              command: |
+                echo ${<<parameters.config>>:?} | base64 --decode >> config.ovpn
+                echo ${<<parameters.login>>:?} | base64 --decode >> vpn.login
+          - run:
+              name: Connect to VPN
+              command: |
+                wget -qO- http://checkip.amazonaws.com | tee initial.ip
+                sudo openvpn --config config.ovpn --auth-user-pass vpn.login > openvpn.log 2>&1 &
+                while [ -n "$(ip addr show tun0 2>&1 > /dev/null)" ]; do
+                  sleep 0.1;
+                done
+                cat openvpn.log
+                wget -qO- http://checkip.amazonaws.com | tee final.ip
+                if [ "$(cat initial.ip)" == "$(cat final.ip)" ]
+                then
+                  echo "This computer's apparent public IP address was not different after connecting"
+                  echo "This may mean that your VPN is not configured correctly."
+                  exit 1
+                fi
+      disconnect:
+        description: "Disconnect from OpenVPN"
+        steps:
+          - run:
+              name: Disconnect from VPN
+              command: sudo killall openvpn || true
+          - run:
+              name: remove OpenVPN config
+              command: sudo rm config.ovpn
+    steps:
+      - install
+      - connect
+      - run: ping -c 5 jenkins5.nauto.com
+      - disconnect
 
 workflows:
   main:
