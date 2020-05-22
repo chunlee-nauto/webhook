@@ -35,7 +35,7 @@ jobs:
         name: Do stuff in our infrastructure
         command: |
            sudo ping -c 2 10.6.21.22
-           dig jenkins5.nauto.systems
+           sudo dig jenkins5.nauto.systems
 workflows:
   version: 2
   build-and-release:
