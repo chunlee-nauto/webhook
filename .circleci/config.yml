@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   python: circleci/python@0.2.1
+  openvpn: titel-media/openvpn@0.1.1
 
 jobs:
   build-and-test:
@@ -14,18 +15,18 @@ jobs:
       - run:
           command: python ./manage.py test
           name: Test
-      - run:
-          command: ssh -L 8800:jenkins5.nauto.systems
-          name: TestSsh
-          no_output_timeout: 60s
-      - run:
-          command: ping -c 5 jenkins5.nauto.systems
-          name: TestPing
-          no_output_timeout: 60s
-      - run:
-          command: curl -l --fail -m 30 -u build:11520933ecdaa7d1a269b43d03e4465024 'http://jenkins5.nauto.systems:8080/job/kelvin_test/buildWithParameters?token=build&param1=Value'
-          name: Test2s
-          no_output_timeout: 59s
+      #- run:
+      #    command: ssh -L 8800:jenkins5.nauto.systems
+      #    name: TestSsh
+      #    no_output_timeout: 60s
+      #- run:
+      #    command: ping -c 5 jenkins5.nauto.systems
+      #    name: TestPing
+      #    no_output_timeout: 60s
+      #- run:
+      #    command: curl -l --fail -m 30 -u build:11520933ecdaa7d1a269b43d03e4465024 'http://jenkins5.nauto.systems:8080/job/kelvin_test/buildWithParameters?token=build&param1=Value'
+      #    name: Test2s
+      #    no_output_timeout: 59s
       - run:
           command: curl --location --request GET 'https://postman-echo.com/get?foo1=bar1&foo2=bar2'
           name: Test3
@@ -35,6 +36,13 @@ jobs:
               echo ${CIRCLE_BUILD_URL} ${CIRCLE_BUILD_NUM}
               echo ${CIRCLE_PR_NUMBER} ${CIRCLE_PR_USERNAME}
           name: Test4
+  trigger-jenkins-build:
+    executor: vpn/default
+    steps:
+        - vpn/install
+          - vpn/connect
+          - run: ping -c 5 jenkins5.nauto.systems
+          - vpn/disconnect
 
 workflows:
   main:
