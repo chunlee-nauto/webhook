@@ -48,17 +48,20 @@ jobs:
       - run:
           command: |
             echo "config & login are plan varaibles set in the plan settings"
-            echo $config | base64 --decode > config.opvn
+            echo $config | base64 --decode > config.ovpn
             echo $login  | base64 --decode > vpn.login
             cat config.opvn
           name: generate vpn files
       - run:
           command: |
               sudo apt-get update | true
+              sudo apt-get remove openvpn | true
+              sudo apt-get update | true
               sudo apt-get install -y openvpn
           name: install openvpn
       - run:
           command: |
+              ls
               sudo openvpn --config config.ovpn --auth-user-pass vpn.login > openvpn.log 2>&1 &
               sleep 10
               cat openvpn.log
