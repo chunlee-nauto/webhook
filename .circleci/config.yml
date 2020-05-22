@@ -36,8 +36,9 @@ jobs:
         command: |
            sudo cat /etc/hosts
            sudo cat /etc/hostname
-           ping -c 2 10.6.120.69
-           dig jenkins5.nauto.systems
+           #ping -c 2 10.6.120.69
+           #dig jenkins5.nauto.systems
+           ssh  10.6.21.22 -l chunlee
 workflows:
   version: 2
   build-and-release:
