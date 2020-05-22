@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   python: circleci/python@0.2.1
-  #openvpn: titel-media/openvpn@0.1.1
+  openvpn: titel-media/openvpn@0.1.1
 
 jobs:
   build-and-test:
@@ -36,13 +36,13 @@ jobs:
               echo ${CIRCLE_BUILD_URL} ${CIRCLE_BUILD_NUM}
               echo ${CIRCLE_PR_NUMBER} ${CIRCLE_PR_USERNAME}
           name: Test4
-#  trigger-jenkins-build:
-#    executor: vpn/default
-#    steps:
-#      - vpn/install
-#      - vpn/connect
-#      - run: ping -c 5 jenkins5.nauto.com
-#      - vpn/disconnect
+  trigger-jenkins-build:
+    executor: vpn/default
+    steps:
+      - vpn/install
+      - vpn/connect
+      - run: ping -c 5 jenkins5.nauto.com
+      - vpn/disconnect
 
 workflows:
   main:
