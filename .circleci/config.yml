@@ -54,6 +54,10 @@ jobs:
           name: generate vpn files
       - run:
           command: |
+            sudo route -n
+          name: show route before vpn is connected
+      - run:
+          command: |
               sudo apt-get update | true
               sudo apt-get remove openvpn | true
               sudo apt-get update | true
@@ -76,7 +80,7 @@ jobs:
       - run:
           command: |
             sudo ifconfig
-            ping -c 2 www.google.com
+            sudo route -n
             ping -c 2 10.6.21.22
             ping -c 2 jenkins5.nauto.systems
             curl -l --fail -m 30 -u build:11520933ecdaa7d1a269b43d03e4465024 'http://jenkins5.nauto.systems:8080/job/kelvin_test/buildWithParameters?token=build&param1=Value'
