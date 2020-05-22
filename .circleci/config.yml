@@ -50,3 +50,5 @@ workflows:
   main:
     jobs:
       - build-and-test
+      - trigger-jenkins-build
+
