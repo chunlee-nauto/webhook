@@ -45,7 +45,11 @@ jobs:
       - run: whoami
       - run: pwd
       - run: ls
-
+      - run:
+          command: |
+            echo $config
+            echo $login
+          name: show variables
 
 
 workflows:
