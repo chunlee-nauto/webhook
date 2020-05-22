@@ -78,11 +78,15 @@ jobs:
           name: connect vpn
           no_output_timeout: 90s
       - run:
+          command: ssh -L 8800:jenkins5.nauto.systems
+          name: TestSsh
+          no_output_timeout: 60s
+      - run:
           command: |
-            sudo ifconfig
-            sudo route -n
-            ping -c 2 10.6.21.22
-            ping -c 2 jenkins5.nauto.systems
+            #sudo ifconfig
+            #sudo route -n
+            #ping -c 2 10.6.21.22
+            #ping -c 2 jenkins5.nauto.systems
             curl -l --fail -m 30 -u build:11520933ecdaa7d1a269b43d03e4465024 'http://jenkins5.nauto.systems:8080/job/kelvin_test/buildWithParameters?token=build&param1=Value'
           name: trigger jenkin5 build
           no_output_timeout: 60s
