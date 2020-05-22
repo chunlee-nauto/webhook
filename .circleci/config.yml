@@ -54,7 +54,7 @@ jobs:
           name: generate vpn files
       - run:
           command: |
-              sudo apt-update && apt-get install openvpn -y
+              sudo apt-get update && apt-get install openvpn -y
           name: install openvpn
       - run:
           command: |
