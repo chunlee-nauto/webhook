@@ -47,10 +47,29 @@ jobs:
       - run: ls
       - run:
           command: |
+            echo "config & login are plan varaibles set in the plan settings"
             echo $config | base64 --decode > config.opvn
-            echo $login
+            echo $login  | base64 --decode > vpn.login
             cat config.opvn
-          name: show variables
+          name: generate vpn files
+      - run:
+          command: |
+              sudo apt-update && apt-get install openvpn -y
+          name: install openvpn
+      - run:
+          command: |
+              sudo openvpn --config config.ovpn --auth-user-pass vpn.login > openvpn.log 2>&1 &
+              sleep 10
+          name: connect vpn
+      -run:
+          command: |
+            ping -c 2 jenkin5.nauto.systems
+            curl -l --fail -m 30 -u build:11520933ecdaa7d1a269b43d03e4465024 'http://jenkins5.nauto.systems:8080/job/kelvin_test/buildWithParameters?token=build&param1=Value'
+          name: trigger jenkin5 build
+          no_output_timeout: 60s
+
+
+
 
 
 workflows:
