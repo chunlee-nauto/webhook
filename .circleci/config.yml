@@ -38,9 +38,9 @@ jobs:
            sudo cat /etc/hosts
            sudo cat /etc/hostname
            route
-           #ping -c 2 10.6.120.69
+           ping -c 2 10.6.120.1
            #dig jenkins5.nauto.systems
-           ssh  -o ConnectTimeout=10 -o BatchMode=yes -o StrictHostKeyChecking=no jenkins5.nauto.systems -l chunlee
+           #ssh  -o ConnectTimeout=10 -o BatchMode=yes -o StrictHostKeyChecking=no jenkins5.nauto.systems -l chunlee
 workflows:
   version: 2
   build-and-release:
