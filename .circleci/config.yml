@@ -18,14 +18,15 @@ jobs:
         #  n$VPN_PASSWORD\\n\" >> vpn.login\n"
         command: |
           echo "config & login are plan varaibles set in the plan settings"
-          echo $config | base64 --decode > config.ovpn
+          #echo $config | base64 --decode > config.ovpn
           echo $login  | base64 --decode > vpn.login
           cat config.ovpn
     - run:
         name: Connect to VPN
         command: |
           ls
-          sudo openvpn --config config.ovpn --auth-user-pass vpn.login > openvpn.log 2>&1 &
+          #sudo openvpn --config config.ovpn --auth-user-pass vpn.login > openvpn.log 2>&1 &
+          sudo openvpn --config nauto-220-gmail.ovpn --auth-user-pass vpn.login > openvpn.log 2>&1 &
           sudo /bin/bash -c 'echo "nameserver 10.6.14.7" > /run/resolvconf/resolv.conf'
           while [ -n "$(ip addr show tun0 2>&1 > /dev/null)" ]; do
             sleep 0.1;
