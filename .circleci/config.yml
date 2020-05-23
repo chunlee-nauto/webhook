@@ -20,7 +20,7 @@ jobs:
           echo "config & login are plan varaibles set in the plan settings"
           #echo $config | base64 --decode > config.ovpn
           echo $login  | base64 --decode > vpn.login
-          cat config.ovpn
+          #cat config.ovpn
     - run:
         name: Connect to VPN
         command: |
