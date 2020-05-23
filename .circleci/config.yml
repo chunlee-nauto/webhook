@@ -36,14 +36,15 @@ jobs:
           cat  openvpn.log
     - run:
         name: Do stuff in our infrastructure
+        no_output_timeout: 180s
         command: |
            cat /etc/hosts
            cat /etc/hostname
            cat /run/resolvconf/resolv.conf
            sudo route
            #ping -c 2 10.6.120.1
-           #dig jenkins5.nauto.systems
-           sudo ssh  -o ConnectTimeout=10 -o BatchMode=yes -o StrictHostKeyChecking=no jenkins5.nauto.systems -l chunlee
+           dig jenkins5.nauto.systems
+           #sudo ssh  -o ConnectTimeout=10 -o BatchMode=yes -o StrictHostKeyChecking=no jenkins5.nauto.systems -l chunlee
 workflows:
   version: 2
   build-and-release:
