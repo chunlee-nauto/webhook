@@ -12,6 +12,9 @@ jobs:
     - run:
         command: |
           wget -qO- http://checkip.amazonaws.com
+    - run:
+        command: |
+          echo 'just want to make some change'
 #    - run:
 #        name: Install OpenVPN
 #        command: |
