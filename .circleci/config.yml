@@ -9,6 +9,9 @@ jobs:
     - run:
         command: |
           sudo ifconfig
+    - run:
+        command: |
+          wget -qO- http://checkip.amazonaws.com
 #    - run:
 #        name: Install OpenVPN
 #        command: |
