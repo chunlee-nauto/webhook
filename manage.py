@@ -6,4 +6,5 @@ parser.add_argument('value', help='some value')
 
 args = parser.parse_args()
 
+print ('more')
 print ('value={}'.format(args.value))

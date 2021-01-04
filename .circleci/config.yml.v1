@@ -1,0 +1,114 @@
+version: 2.1
+
+orbs:
+  python: circleci/python@0.2.1
+  #openvpn: titel-media/openvpn@0.1.1
+
+jobs:
+  build-and-test:
+    executor: python/default
+    steps:
+      - checkout
+      - python/load-cache
+      - python/install-deps
+      - python/save-cache
+      - run:
+          command: python ./manage.py test
+          name: Test
+      #- run:
+      #    command: ssh -L 8800:jenkins5.nauto.systems
+      #    name: TestSsh
+      #    no_output_timeout: 60s
+      #- run:
+      #    command: ping -c 5 jenkins5.nauto.systems
+      #    name: TestPing
+      #    no_output_timeout: 60s
+      #- run:
+      #    command: curl -l --fail -m 30 -u build:11520933ecdaa7d1a269b43d03e4465024 'http://jenkins5.nauto.systems:8080/job/kelvin_test/buildWithParameters?token=build&param1=Value'
+      #    name: Test2s
+      #    no_output_timeout: 59s
+      - run:
+          command: curl --location --request GET 'https://postman-echo.com/get?foo1=bar1&foo2=bar2'
+          name: Test3
+      - run:
+          command: |
+              echo ${CIRCLE_BRANCH}  ${CIRCLE_PULL_REQUEST}
+              echo ${CIRCLE_BUILD_URL} ${CIRCLE_BUILD_NUM}
+              echo ${CIRCLE_PR_NUMBER} ${CIRCLE_PR_USERNAME}
+          name: Test4
+  trigger-jenkins-build:
+    #machine:
+    #  image: ubuntu-1604:201903-01
+    machine: true
+
+    steps:
+      - checkout
+      - run: whoami
+      - run: pwd
+      - run: ls
+      - run:
+          command: |
+            echo "config & login are plan varaibles set in the plan settings"
+            echo $config | base64 --decode > config.ovpn
+            echo $login  | base64 --decode > vpn.login
+            cat config.ovpn
+          name: generate vpn files
+      - run:
+          command: |
+            sudo route -n
+          name: show route before vpn is connected
+      - run:
+          command: |
+              sudo apt-get update | true
+              sudo apt-get remove openvpn | true
+              sudo apt-get update | true
+              sudo apt-get install -y openvpn
+          name: install openvpn
+      - run:
+          command: |
+              ls
+              sudo openvpn --config config.ovpn --auth-user-pass vpn.login > openvpn.log 2>&1 &
+              sudo /bin/bash -c 'echo "nameserver 10.6.14.7" > /run/resolvconf/resolv.conf'
+              while [ -n "$(ip addr show tun0 2>&1 > /dev/null)" ]; do
+                sleep 1;
+              done
+              echo 1234567890
+              sudo ip addr show tun0
+              echo 1234567890
+              cat openvpn.log
+          name: connect vpn
+          no_output_timeout: 90s
+#      - run:
+#          command: ssh -L 8800:jenkins5.nauto.systems
+#          name: TestSsh
+#          no_output_timeout: 60s
+      - run:
+          command: |
+            sudo dig jenkins5.nauto.systems
+          name: dig
+      - run:
+          command: |
+            #sudo ifconfig
+            #sudo route -n
+            sudo ping -c 2 10.6.21.22
+            sudo ping -c 2 jenkins5.nauto.systems
+            #curl -l --fail -m 30 -u build:11520933ecdaa7d1a269b43d03e4465024 'http://jenkins5.nauto.systems:8080/job/kelvin_test/buildWithParameters?token=build&param1=Value'
+            #curl -l --fail -m 30 -u build:11520933ecdaa7d1a269b43d03e4465024 'http://10.6.21.22:8080/job/kelvin_test/buildWithParameters?token=build&param1=Value'
+          name: trigger jenkin5 build
+          no_output_timeout: 60s
+      - run:
+          command: |
+            sudo pkill -9 openvpn
+          name: kill openvpn
+
+workflows:
+  main:
+    jobs:
+      #- build-and-test
+      - trigger-jenkins-build
+#workflows:
+# version: 2
+# build-and-release:
+#   jobs:
+#     - trigger-jenkins-build
+

@@ -1,21 +1,69 @@
-version: 2.1
-
-orbs:
-  python: circleci/python@0.2.1
-
+version: 2
 jobs:
-  build-and-test:
-    executor: python/default
+  test-vpn:
+    machine:
+      image: ubuntu-1604:201903-01
+    #machine: true
     steps:
-      - checkout
-      - python/load-cache
-      - python/install-deps
-      - python/save-cache
-      - run:
-          command: python ./manage.py test
-          name: Test
-
+    - checkout
+    - run:
+        command: |
+          sudo ifconfig
+    - run:
+        command: |
+          wget -qO- http://checkip.amazonaws.com
+    - run:
+        command: |
+          echo 'just want to make some change'
+#    - run:
+#        name: Install OpenVPN
+#        command: |
+#          # sudo apt-get install --upgrade openvpn
+#          sudo apt-get update | true
+#          sudo apt-get remove openvpn | true
+#          sudo apt-get update | true
+#          sudo apt-get install -y openvpn
+#    - run:
+#        name: Init VPN
+#        #command: "echo $VPN_CONFIG | base64 --decode >> config.ovpn \nprintf \"$VPN_USER\\\
+#        #  n$VPN_PASSWORD\\n\" >> vpn.login\n"
+#        command: |
+#          echo "config & login are plan varaibles set in the plan settings"
+#          #echo $config | base64 --decode > config.ovpn
+#          echo $login  | base64 --decode > vpn.login
+#          #cat config.ovpn
+#    - run:
+#        name: Connect to VPN
+#        command: |
+#          ls
+#          #sudo openvpn --config config.ovpn --auth-user-pass vpn.login > openvpn.log 2>&1 &
+#          sudo openvpn --config nauto-220-gmail.ovpn --auth-user-pass vpn.login > openvpn.log 2>&1 &
+#          sudo /bin/bash -c 'echo "nameserver 10.6.14.7" > /run/resolvconf/resolv.conf'
+#          while [ -n "$(ip addr show tun0 2>&1 > /dev/null)" ]; do
+#            sleep 0.1;
+#          done
+#          cat  openvpn.log
+#    - run:
+#        name: Do stuff in our infrastructure
+#        no_output_timeout: 180s
+#        command: |
+#           echo ### hosts ###
+#           cat /etc/hosts
+#
+#           echo ### hostname ###
+#           cat /etc/hostname
+#
+#           echo ### resolv.conf ###
+#           cat /run/resolvconf/resolv.conf
+#
+#           echo ### route ###
+#           sudo route
+#
+#           #ping -c 2 10.6.120.1
+#           dig jenkins5.nauto.systems
+#           #sudo ssh  -o ConnectTimeout=10 -o BatchMode=yes -o StrictHostKeyChecking=no jenkins5.nauto.systems -l chunlee
 workflows:
-  main:
+  version: 2
+  build-and-release:
     jobs:
-      - build-and-test
+    - test-vpn
